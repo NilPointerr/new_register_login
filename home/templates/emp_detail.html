@@ -1,0 +1,254 @@
+
+{% extends 'base.html' %} {% block title %} {{ title }} {% endblock %} {%comment %} {% load crispy_forms_tags %} {% endcomment %}
+{%load static%}
+{% comment %} 
+<head>
+  <link rel="stylesheet" type="text/css" href="{% static 'temp.css' %}" />
+</head> {% endcomment %}
+
+{% block stylesheet %}
+<style>
+  /* Styling for the employee's profile image */
+  .rounded-circle-image {
+    border-radius: 50%;
+    width: 250px;
+    height: 250px;
+  }
+  
+  /* Styling for the form wrapper */
+  .form-wrapper {
+    background: #fff;
+    box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.14), 
+                0 3px 1px -2px rgba(0, 0, 0, 0.12), 
+                0 1px 5px 0 rgba(0, 0, 0, 0.2);
+    padding: 2rem;
+  }
+  
+  /* Styling for the list group */
+  .list-group {
+    margin-top: 10px;
+  }
+  
+  /* Styling for the text color of the span element */
+  span {
+    color: #6f6f6f;
+    font-weight: lighter;
+    font-size: 16px;
+  }
+  
+  /* Styling for the list group item */
+  .list-group-item {
+    position: relative;
+    display: block;
+    padding: 10px 15px;
+    margin-bottom: -1px;
+    background-color: #fff;
+    border: 1px solid transparent;
+    font-size: 17px;
+  }
+  
+  /* Styling for the close button of the message alert */
+  #override-start {
+    background: none;
+    top: 35%;
+    right: 13px;
+    color: #000;
+    font-size: 24px;
+  }
+  
+  /* Styling for the warning and success message alerts */
+  .alert-warning {
+    background: #fd7b7b;
+    font-size: 16px;
+  }
+  
+  .alert-success {
+    background-color: #82b72a;
+    font-size: 16px;
+  }
+  
+  /* Styling for the employee name title */
+  .employee-name-title {
+    color: #3873b1;
+    font-weight: 600;
+    font-variant: petite-caps;
+    font-size: 3.1rem;
+  }
+  
+  /* Styling for the font variant of the span and list group item div elements */
+  span, .list-group-item > div {
+    font-variant: petite-caps;
+  }
+  
+  /* Styling for the panel heading and title */
+  .panel-default > .panel-heading {
+    color: #fff;
+    background-color: #2d88a9;
+  }
+  
+  .panel-title a:hover,
+  .panel-title a:active,
+  .panel-title a:focus {
+    color: #e6e4e4;
+
+
+    .btn-group-justified {
+      display: flex;
+      justify-content: space-between;
+    }
+  
+    .btn-group-justified .btn {
+      flex-grow: 1;
+      margin-right: 5px;
+      font-size: 20px;
+      max-width: 150px; /* adjust this value to change the width */
+      width: 100%;
+    }
+  
+  }</style>
+
+{% endblock %} {% block body %}
+<div style="background-color: transparent;">
+<section class="content" >
+  <section class="container-fluid">
+    <section class="form-wrapper">
+      <section class="row">
+        <section class="col col-lg-8 col-md-12 col-sm-12">
+          {% if messages %} {% for message in messages %}
+          <div {% if message.tags %} class="{{ message.tags}}" {% endif %}>
+            {{ message }}
+            <button
+              type="button"
+              class="close"
+              id="override-start"
+              data-dismiss="alert"
+              aria-label="Close"
+            >
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          {% endfor %} {% endif %}
+        </section>
+      </section>
+
+      <section class="row">
+        <section class="col-lg-12 col-md-12 col-sm-12 text-center space-margin">
+          <h3 class="title-h3">{{ emp.user.username|upper }}</h3>
+        </section>
+      </section>
+
+      <section class="row">
+        <section class="col-lg-4 text-center">
+          <img
+            src="{{ employee.image.url}}"
+            class="img-fluid rounded-circle-image"
+          />
+        </section>
+        <section class="col-lg-8 col-md-12 col-sm-12">
+          <div class="list-group" id="list-tab" role="tablist">
+            <a
+              class="list-group-item list-group-item-action"
+              id="list-home-list"
+              data-toggle="list"
+              href=""
+              role="tab"
+              aria-controls=""
+              ><span>Employee's Name</span>
+              <div><b>{{ emp.user.username }}</b></div>
+            </a>
+            <a
+              class="list-group-item list-group-item-action"
+              id="list-profile-list"
+              data-toggle="list"
+              href=""
+              role="tab"
+              aria-controls=""
+              ><span>Start Date</span>
+              <div><b>{{ emp.start_date }}</b></div>
+            </a>
+            <a
+              class="list-group-item list-group-item-action"
+              id="list-messages-list"
+              data-toggle="list"
+              href=""
+              role="tab"
+              aria-controls=""
+              ><span>End Date</span>
+              <div><b>{{ emp.end_date }}</b></div>
+            </a>
+            <a
+              class="list-group-item list-group-item-action"
+              id="list-settings-list"
+              data-toggle="list"
+              href=""
+              role="tab"
+              aria-controls=""
+              ><span>Email</span>
+              <div><b>{{emp.user.email}}</b></div>
+            </a>
+            <a
+              class="list-group-item list-group-item-action"
+              id="list-settings-list"
+              data-toggle="list"
+              href=""
+              role="tab"
+              aria-controls=""
+              ><span>Type</span>
+              <div><b>{{ emp.leave_type }}</b></div>
+            </a>
+            <a
+              class="list-group-item list-group-item-action"
+              id="list-settings-list"
+              data-toggle="list"
+              href=""
+              role="tab"
+              aria-controls=""
+              ><span>Reason</span>
+              <div><b>{{ emp.sub_leave }}</b></div>
+            </a>
+            <a
+              class="list-group-item list-group-item-action"
+              id="list-settings-list"
+              data-toggle="list"
+              href=""
+              role="tab"
+              aria-controls=""
+              ><span>Status</span>
+              <div><b>{{ emp.status}}</b></div>
+            </a>
+          </div>
+        </section>
+      </section>
+
+      <span style="font-size: 13px; padding-left: 1rem" class="pull-left"
+        >Created <b></b
+      ></span>
+
+      <section class="row">
+        <section class="col col-lg-4 col-sm-12 col-lg-offset-7 text-center" style="
+        margin-left: 467px;">
+        <div class="btn-group btn-group-justified" style="margin-top: 10px;">
+          <div>
+            <a href="{% url 'reject' pk=emp.user.pk %}" class="btn btn-danger">Decline</a>
+          </div>
+          <div style="margin-left: 10px; margin-right: 10px;">
+            <a href="{% url 'accept' pk=emp.user.pk %}" class="btn btn-success">Approve</a>
+          </div>
+          <div>
+            <a href="{% url 'cancel' pk=emp.user.pk %}" class="btn btn-info">Cancel</a>
+          </div>
+        </div>
+        </section>
+      </section>
+    </section>
+  </section>
+  <!-- /container -->
+</section>
+</div>
+{% endblock %}
+
+<script type="text/javascript">
+  {% block extrajs%}
+
+  {% endblock %}
+</script>

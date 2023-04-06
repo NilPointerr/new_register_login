@@ -1,0 +1,134 @@
+
+
+<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
+integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
+crossorigin="anonymous"></script>
+
+<head>
+  {% load static %}
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Register</title>
+  <link rel="stylesheet" href="{% static '/assets/css/bootstrap.css' %}">
+
+  <script defer src="{% static '/assets/fontawesome/js/all.min.js'%}"></script>
+  <link rel="stylesheet" href="{% static '/assets/css/app.css'%}">
+
+  {% if messages %}
+  {% for message in messages %}
+  <div class="alert alert-danger alert-dismissible fade show" role="alert">
+    <strong>{{ message }}</strong>
+    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  {% endfor %}
+  {% endif %}
+
+</head>
+
+<body>
+  <div id="auth" id="auth" style="background-image: url('{% static '/assets/images/login1.jpg' %}'); background-size: 100%; background-repeat: no-repeat; background-position: center;  background-attachment: relative;">
+
+    <div class="container">
+      <div class="row">
+        <div class="col-md-5 col-sm-12 mx-auto">
+          <div class="card pt-4">
+            <div class="card-body">
+              <div class="text-center mb-5">
+                <h3>Register Here </h3>
+              </div>
+              <form action="post">
+                {% csrf_token %}
+                <div class="form-group position-relative has-icon-left">
+                  <label for="First_name">First_name</label>
+                  <div class="position-relative">
+                    <input type="text" class="form-control" name='first_name' placeholder=" First_name" required>
+                    <!-- <div class="form-control-icon">
+                                          <i class="fa fa-user"></i>
+                                      </div> -->
+                  </div>
+
+                  <div class="form-group position-relative has-icon-left">
+                    <label for="Last_name">Last_name</label>
+                    <div class="position-relative">
+                      <input type="text" class="form-control" name='last_name' placeholder=" Last_name" required>
+                      <!-- <div class="form-control-icon">
+                                          <i class="fa fa-user"></i>
+                                      </div> -->
+                    </div>
+
+                    <div class="form-group position-relative has-icon-left">
+                      <label for="Username">Username</label>
+                      <div class="position-relative">
+                        <input type="text" class="form-control" name='username' placeholder=" username"
+                          style="background: transparent;" required>
+                        <!-- <div class="form-control-icon">
+                                              <i class="fa fa-user"></i>
+                                          </div> -->
+                      </div>
+
+                      <div class="form-group position-relative has-icon-left">
+                        <label for="Email">Email</label>
+                        <div class="position-relative">
+                          <input type="email" class="form-control" name='email' placeholder="Example@gmail.com"
+                            style="background: transparent;" required>
+                          <!-- <div class="form-control-icon">
+                                                  <i class="fa fa-user"></i>
+                                              </div> -->
+                        </div>
+
+                      </div>
+                      <div class="form-group position-relative has-icon-left">
+                        <div class="clearfix">
+                          <label for="password">password</label>
+                          <a href="#" class='float-end'>
+                          </a>
+                        </div>
+                        <div class="position-relative">
+                          <input type="password" class="form-control" name="password" placeholder="Password"
+                            style="background: transparent;" required>
+                          <div class="form-control-icon">
+                            <i class="fa fa-key"></i>
+                          </div>
+                        </div>
+                      </div>
+
+                      <div class="form-group position-relative has-icon-left">
+                        <div class="clearfix">
+                          <label for="re_password">re_password</label>
+                          <a href="#" class='float-end'>
+                          </a>
+                        </div>
+                        <div class="position-relative">
+                          <input type="password" class="form-control" name="re_password" placeholder="Re Enter Password"
+                            style="background: transparent;" required>
+                          <div class="form-control-icon">
+                            <i class="fa fa-key"></i>
+                          </div>
+                        </div>
+                      </div>
+
+
+                      <div class='form-check clearfix my-4'>
+                        <div class="checkbox float-start">
+                          <a href="/" class='float-end'>
+                            <small>Already have an account</small>
+                          </a>
+                        </div>
+                      </div>
+                      <div class="clearfix">
+                        <button class="btn btn-primary float-end">Register</button>
+                      </div>
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+  <script src="{% static '/assets/js/feather-icons/feather.min.js'%}"></script>
+  <script src="{% static '/assets/js/app.js'%}"></script>
+  <script src="{% static '/assets/js/main.js'%}"></script>
+</body>
