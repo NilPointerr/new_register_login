@@ -40,6 +40,7 @@ class Leave_form(models.Model):
         ('Rejected','Rejected'),
 
     ]
+    
     start_date = models.DateField()
     end_date = models.DateField()
     leave_type = models.CharField(max_length=100, choices=typeofleave)

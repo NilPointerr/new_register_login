@@ -20,26 +20,64 @@ crossorigin="anonymous"></script>
   <script defer src="{% static '/assets/fontawesome/js/all.min.js'%}"></script>
   <link rel="stylesheet" href="{% static '/assets/css/app.css'%}" />
   
-  {% if messages %} {% for message in messages %}
-  <div class="alert alert-danger alert-dismissible fade show" role="alert" style="background: transparent">
-    <strong>{{ message }}</strong>
-    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-      <span aria-hidden="true">&times;</span>
-    </button>
-  </div>
-  {% endfor %} {% endif %}
+  
 </head>
-
+<style>
+  .messages {
+    list-style: none;
+    padding: 0;
+    margin: 20px 0;
+  }
+  
+  .messages li {
+    padding: 10px;
+    margin-bottom: 10px;
+    border-radius: 5px;
+    font-size: 18px;
+    font-weight: bold;
+  }
+  
+  .messages .success {
+    background-color: #d4edda;
+    color: #155724;
+  }
+  
+  .messages .info {
+    background-color: #cce5ff;
+    color: #004085;
+  }
+  
+  .messages .warning {
+    background-color: #fff3cd;
+    color: #856404;
+  }
+  
+  .messages .error {
+    background-color: #f8d7da;
+    color: #721c24;
+  }
+  
+</style>
 <body>
-  <div id="auth" style="background-image: url('{% static '/assets/images/login1.jpg' %}'); background-size: 100%; background-repeat: no-repeat; background-position: center;  background-attachment: relative;">
+  <div id="auth" style="background-image: url('{% static '/assets/images/login5.jpg' %}'); background-size: 150%; background-repeat: no-repeat; background-position: center;  background-attachment: relative;">
     <div class="container">
       <div class="row">
         <div class="col-md-5 col-sm-12 mx-auto">
           <div class="card pt-4" >
             <div class="card-body" style="background-image: url('{% static '/assets/images/ia.jpg' %}'); background-size: 100%; background-repeat: no-repeat; background-position: relative;  background-attachment: relative;">
               <div class="text-center mb-5">
-                <h3>Sign In</h3>
-              </div>
+                <image src="{% static '/assets/images/ia.png'%}" width ='100' height ='100'>
+
+                <h4>Sign In</h4>
+                {% if messages %}
+                <ul class="messages">
+                  {% for message in messages %}
+                    <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+                  {% endfor %}
+                </ul>
+              {% endif %}
+
+                            </div>
               <form method="post">
                 {% csrf_token %}
                 <div class="form-group position-relative has-icon-left">

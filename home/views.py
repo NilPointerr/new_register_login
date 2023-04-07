@@ -10,6 +10,10 @@ from django.http import HttpResponse
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import get_object_or_404, redirect
 from django.db.models import Q
+from django.conf import settings
+from django.views.decorators.http import require_POST
+from django.http import HttpResponseRedirect
+
 
 # Create your views here.
 
@@ -57,7 +61,7 @@ def login_1(request):
                 return redirect('/leaveform')
 
         else:
-            messages.error(request, 'Invalid credencials')
+            messages.error(request, 'Invalid credentials')
             return render(request, 'login.html')
     else:
         return render(request, 'login.html')
@@ -115,7 +119,53 @@ def accept_1(request, pk):
     obj.status = 'Approved'
     obj.save()
 
-    message = f"Dear {user.username},\n\nWe are happy to inform you that your leave application for {obj.start_date} to {obj.end_date} has been approved. We hope you have a great time on your vacation.\n\nIf you have any questions, please don't hesitate to reach out to us.\n\nRegards,\nThe HR Team"
+    message = f"""Dear {user.username},<br><br>
+                We happy to inform you that your leave application for the following period has been approved:<br><br>
+                <head>
+                   
+                    <style>
+                        table {{
+                            border-collapse: collapse;
+                        }}
+                        th, td {{
+                            border: 1px solid black;
+                            padding: 5px;
+                        }}
+                        th {{
+                            background-color: #ccc;
+                        }}
+                    </style>
+
+                </head>
+
+                <table style="border: 1px solid black;">
+                    <tr>
+                    <th>Start date</th>
+                    <td>{obj.start_date}</td>
+                    </tr>
+                    <th>End date</th>
+                    <td>{obj.end_date}</td>
+                    </tr>
+                    <tr>
+                    <th>Leave Type</th>
+                    <td>{obj.leave_type}</td>
+                    </tr>
+                    <tr>
+                    <th>Sub leave</th>
+                    <td>{obj.sub_leave}</td>
+                    </tr>
+                    <tr>
+                    <th>Satus</th>
+                    <td>{obj.status}</td>
+                    </tr>
+                    <tr>
+                    <th>Reason </th>
+                    <td> nothing!</td>
+                    </tr>
+                </table><br>
+                If you have any questions, please don't hesitate to reach out to us.<br><br>
+                Regards,<br>
+                The HR Team"""
 
     send_mail(
         'Leave Status',
@@ -125,7 +175,7 @@ def accept_1(request, pk):
         fail_silently=False,
     )
 
-    return redirect('/pendingpage')
+    return redirect('/dashboard')
 
 
 def reject_1(request, pk):
@@ -133,7 +183,54 @@ def reject_1(request, pk):
     obj = get_object_or_404(Leave_form, user_id=pk)
     obj.status = 'Rejected'
     obj.save()
-    message = f"Dear {user.username},\n\nWe are regret to inform you that your leave application for {obj.start_date} to {obj.end_date} has been declined. We hope you have a great time on your vacation.\n\nIf you have any questions, please don't hesitate to reach out to us.\n\nRegards,\nThe HR Team"
+    
+    message = f"""Dear {user.username},<br><br>
+                We regret to inform you that your leave application for the following period has been declined:<br><br>
+                <head>
+                   
+                    <style>
+                        table {{
+                            border-collapse: collapse;
+                        }}
+                        th, td {{
+                            border: 1px solid black;
+                            padding: 5px;
+                        }}
+                        th {{
+                            background-color: #ccc;
+                        }}
+                    </style>
+
+                </head>
+
+                <table style="border: 1px solid black;">
+                    <tr>
+                    <th>Start date</th>
+                    <td>{obj.start_date}</td>
+                    </tr>
+                    <th>End date</th>
+                    <td>{obj.end_date}</td>
+                    </tr>
+                    <tr>
+                    <th>Leave Type</th>
+                    <td>{obj.leave_type}</td>
+                    </tr>
+                    <tr>
+                    <th>Sub leave</th>
+                    <td>{obj.sub_leave}</td>
+                    </tr>
+                    <tr>
+                    <th>Satus</th>
+                    <td>{obj.status}</td>
+                    </tr>
+                    <tr>
+                    <th>Reason </th>
+                    <td> nothing!</td>
+                    </tr>
+                </table><br>
+                If you have any questions, please don't hesitate to reach out to us.<br><br>
+                Regards,<br>
+                The HR Team"""
 
     send_mail(
         'Leave Status',
@@ -141,8 +238,9 @@ def reject_1(request, pk):
         'nilesh.ultragmaes@gmail.com',
         [user.email],
         fail_silently=False,
+        html_message=message,
     )
-    return redirect('/pendingpage')
+    return redirect('/dashboard')
 
 
 def cancel_1(request, pk):
@@ -159,7 +257,7 @@ def cancel_1(request, pk):
     #     [user.email],
     #     fail_silently=False,
     # )
-    return redirect('/pendingpage')
+    return redirect('/dashboard')
 
 
 def all_leaves(request, pk):
@@ -226,9 +324,20 @@ def dashboard(request):
     all = Leave_form.objects.all()
     total_leaves = all.count()
 
+    superuser_count = User.objects.filter(is_superuser=True).count() 
+    total_user = User.objects.all().count()
+    Employee = total_user-superuser_count
     con = {'total_canceled_leaves': total_canceled_leaves,
            'total_accept_leaves': total_accept_leaves,
            'total_reject_leaves': total_reject_leaves,
            'total_pending_leaves': total_pending_leaves,
-           'total_leaves': total_leaves}
+           'total_leaves': total_leaves,
+           'Employee':Employee}
     return render(request, 'base.html', con)
+
+
+
+
+
+
+

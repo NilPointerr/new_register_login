@@ -23,9 +23,10 @@
       <div id="sidebar" class='active'>
          <div class="sidebar-wrapper active">
             <div class="sidebar-header" style="height: 50px;margin-top: -30px">
-               <i class="fa fa-users text-success me-4"></i>
+             <image src="{% static '/assets/images/ia.png'%}" width ='50' height ='20'>
                <span> Infusion </span>
             </div>
+
             {%if user.is_superuser%}
             <div class="sidebar-menu">
                <ul class="menu">
@@ -41,7 +42,7 @@
                         <span>All Leaves</span>
                      </a>
                   </li>
-                  <li class="sidebar-item  ">
+                  {% comment %} <li class="sidebar-item  ">
                      <a href="/pendingpage" class='sidebar-link'>
                         <i class="fa fa-table text-success"></i>
                         <span>Pending Leaves</span>
@@ -66,23 +67,12 @@
                         <i class="fa fa-table text-success"></i>
                         <span>Cancel Leaves</span>
                      </a>
-                  </li>
-                  <li class="sidebar-item  has-sub">
-                     <a href="#" class='sidebar-link'>
-                        <i class="fa fa-user text-success"></i>
-                        <span>Users</span>
-                     </a>
-                     <ul class="submenu ">
-                        <li>
-                           <a href="add_user.html">Add User</a>
-                        </li>
-                        <li>
-                           <a href="manage_user.html">Manage Users</a>
-                        </li>
-                     </ul>
-                  </li>
+                  </li> {% endcomment %}
+
                </ul>
             </div>
+            {%else%}
+            
             {%endif%}
             <button class="sidebar-toggler btn x"><i data-feather="x"></i></button>
          </div>
@@ -96,44 +86,58 @@
                aria-label="Toggle navigation">
                <span class="navbar-toggler-icon"></span>
             </button>
-            <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <div class="collapse navbar-collapse" id="navbarSupportedContent"  >
                <ul class="navbar-nav d-flex align-items-center navbar-light ms-auto">
-                  {% comment %} <li class="dropdown nav-icon">
-                     <a href="#" data-bs-toggle="dropdown" class="nav-link  dropdown-toggle nav-link-lg nav-link-user">
-                        <div class="d-lg-inline-block">
-                           <i data-feather="bell"></i><span class="badge bg-info">2</span>
-                        </div>
-                     </a>
-                     <div class="dropdown-menu dropdown-menu-end dropdown-menu-large">
-                        <h6 class='py-2 px-4'>Notifications</h6>
-                        <ul class="list-group rounded-none">
-                           <li class="list-group-item border-0 align-items-start">
-                              <div class="row mb-2">
-                                 <div class="col-md-12 notif">
-                                    <a href="leave_details.html">
-                                       <h6 class='text-bold'>John Doe</h6>
-                                       <p class='text-xs'>
-                                          applied for leave at 05-21-2021
-                                       </p>
-                                    </a>
-                                 </div>
-                                 <div class="col-md-12 notif">
-                                    <a href="leave_details.html">
-                                       <h6 class='text-bold'>Jane Doe</h6>
-                                       <p class='text-xs'>
-                                          applied for leave at 05-21-2021
-                                       </p>
-                                    </a>
-                                 </div>
-                              </div>
-                           </li>
-                        </ul>
+                  <li class="dropdown nav-icon">
+                     <div class="sidebar-menu">
+                        <select class="form-control" onchange="if (this.value) window.location.href=this.value">
+                           <option value="/manage"> Leave Status</option>
+                           <optgroup>
+                              <option value="/pendingpage">Pending Leaves</option>    
+                              <option value="/acceptpage">Approved Leaves</option>
+                              <option value="/rejectpage">Rejected Leaves</option>
+                              <option value="/cancelpage">Cancelled Leaves</option>
+                           </optgroup>
+                        </select>
                      </div>
-                  </li> {% endcomment %}
+
+
+                     <style>
+                        .sidebar-menu select {
+                           padding: 10px 30px 10px 10px; /* added extra padding to the right to make space for the arrow */
+                           font-size: 16px;
+                           color: #444;
+                           border: none;
+                           background: #f2f2f2;
+                           -webkit-appearance: none;
+                           -moz-appearance: none;
+                           appearance: none;
+                           cursor: pointer;
+                           background-image: url('{% static '/assets/images/dropdown.png' %}'); 
+                           background-repeat: no-repeat;
+                           background-size: 10%;
+                           background-position: right 10px center; /* adjust the position of the arrow */
+                         }
+                         
+                         .sidebar-menu select:hover {
+                           background: #e6e6e6;
+                         }
+                         
+                         .sidebar-menu select:focus {
+                           outline: none;
+                           box-shadow: 0 0 5px #6a5acd;
+                         }
+                         
+                         .sidebar-menu optgroup {
+                           font-weight: bold;
+                         }
+                         
+                        </style>
+                  </li> 
                   <li class="dropdown">
                      <a href="#" data-bs-toggle="dropdown" class="nav-link dropdown-toggle nav-link-lg nav-link-user">
                         <div class="avatar me-1">
-                           <img src="{% static 'assets/images/admin.png'%}" alt="" srcset="">
+                           <img src="{% static '/assets/images/admin.png'%}" alt="" srcset="">
                         </div>
                         {%if user.is_authenticated%}
                         <div class="d-none d-md-block d-lg-inline-block">Hi,{{user.username}}</div>
@@ -160,13 +164,15 @@
          </nav>
 
          <div class="main-content container-fluid" id="auth" 
-         style="background-image: url('{% static '/assets/images/login1.jpg' %}'); 
-         background-size: 100%; background-repeat: no-repeat; background-position: center;  background-attachment: relative;
+         style="background-image: url('{% static '/assets/images/login5.jpg' %}'); 
+         background-size: 150%; background-repeat: no-repeat; background-position: center;  background-attachment: relative;
          ">
+
          
+
          {% block body %}
             <div class="page-title">
-               <h3><b>Dashboard<b></h3>
+               <h3  style="color: white;"><b>Dashboard<b></h3>
             </div>
             <section class="section">
                <div class="row mb-2">
@@ -179,8 +185,8 @@
                                     <i class="fa fa-users text-warning fa-3x me-4"></i>
                                  </div>
                                  <div>
-                                    <h4>Total Leaves</h4>
-                                    <h2 class="h1 mb-0"> {{total_leaves}} </h2>
+                                    <h4>Employees</h4>
+                                    <h2 class="h1 mb-0"> {{Employee}} </h2>
                                  </div>
                               </div>
                            </div>
@@ -274,6 +280,13 @@
 </body>
 
 </html>
+
+
+
+
+
+
+
 
 
 
