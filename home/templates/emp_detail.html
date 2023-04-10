@@ -216,6 +216,28 @@
               ><span>Status</span>
               <div><b>{{ emp.status}}</b></div>
             </a>
+            <form method="post" action="{% url 'reject' pk=emp.user.pk %}">
+              {% csrf_token %}
+            <a
+            class="list-group-item list-group-item-action"
+            id="list-settings-list"
+            data-toggle="list"
+            role="tab"
+            aria-controls=""
+            ><span>Reason</span>
+            <br>
+            <textarea rows="5" cols="60" name="description">Enter Reason here...</textarea>
+            <br>
+          </a>
+          <input type="hidden" name="reason" value="{{ reason }}">
+          <div class="btn-group btn-group-justified" style="margin-top: 10px;">
+            <button type="submit" name="action" value="reject" class="btn btn-danger" style="margin-right: 10px;">Decline</button>
+            <button type="submit" name="action" value="approve" class="btn btn-success" style="margin-right: 10px;">Approve</button>
+            <a href="{% url 'cancel' pk=emp.user.pk %}" class="btn btn-info">Cancel</a>
+          </div>
+          
+
+        </form>
           </div>
         </section>
       </section>
@@ -224,7 +246,7 @@
         >Created <b></b
       ></span>
 
-      <section class="row">
+      {% comment %} <section class="row">
         <section class="col col-lg-4 col-sm-12 col-lg-offset-7 text-center" style="
         margin-left: 467px;">
         <div class="btn-group btn-group-justified" style="margin-top: 10px;">
@@ -239,7 +261,7 @@
           </div>
         </div>
         </section>
-      </section>
+      </section> {% endcomment %}
     </section>
   </section>
   <!-- /container -->

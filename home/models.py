@@ -40,7 +40,7 @@ class Leave_form(models.Model):
         ('Rejected','Rejected'),
 
     ]
-    
+
     start_date = models.DateField()
     end_date = models.DateField()
     leave_type = models.CharField(max_length=100, choices=typeofleave)
@@ -51,3 +51,10 @@ class Leave_form(models.Model):
     #     managed = True
     #     db_table = 'leavein'
     
+
+class Reason(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE,primary_key=True)
+    reason = models.CharField(max_length=500)
+
+    class Meta:
+        db_table = 'reason'

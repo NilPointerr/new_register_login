@@ -3,7 +3,7 @@ from django.contrib.auth.models import User
 from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout
 from django.shortcuts import render
-from .models import Leave_form
+from .models import Leave_form,Reason
 from django.contrib.auth.models import User
 from django.core.mail import send_mail
 from django.http import HttpResponse
@@ -119,6 +119,25 @@ def accept_1(request, pk):
     obj.status = 'Approved'
     obj.save()
 
+
+    if 'description' in request.POST:
+        reason_text = request.POST.get('description')
+    else:
+        reason_text = 'No reason provided.'
+
+        
+    try:
+        reason_obj = Reason.objects.filter(user_id=pk).latest('pk')
+    except Reason.DoesNotExist:
+        # Handle the case where there are no Reason objects for the given user_id
+        # For example, you could create a new Reason object:
+        reason_obj = Reason(user_id=pk, reason='No reason provided.')
+        reason_obj.save()
+
+    reason_obj.reason = reason_text
+    reason_obj.save()
+
+
     message = f"""Dear {user.username},<br><br>
                 We happy to inform you that your leave application for the following period has been approved:<br><br>
                 <head>
@@ -160,7 +179,7 @@ def accept_1(request, pk):
                     </tr>
                     <tr>
                     <th>Reason </th>
-                    <td> nothing!</td>
+                    <td>{reason_text}</td>
                     </tr>
                 </table><br>
                 If you have any questions, please don't hesitate to reach out to us.<br><br>
@@ -177,17 +196,34 @@ def accept_1(request, pk):
 
     return redirect('/dashboard')
 
-
 def reject_1(request, pk):
     user = User.objects.get(pk=pk)
     obj = get_object_or_404(Leave_form, user_id=pk)
     obj.status = 'Rejected'
     obj.save()
-    
+
+    if 'description' in request.POST:
+        reason_text = request.POST.get('description')
+    else:
+        reason_text = 'No reason provided.'
+
+        
+    try:
+        reason_obj = Reason.objects.filter(user_id=pk).latest('pk')
+    except Reason.DoesNotExist:
+        # Handle the case where there are no Reason objects for the given user_id
+        # For example, you could create a new Reason object:
+        reason_obj = Reason(user_id=pk, reason='No reason provided.')
+        reason_obj.save()
+
+    reason_obj.reason = reason_text
+    reason_obj.save()
+
+
     message = f"""Dear {user.username},<br><br>
                 We regret to inform you that your leave application for the following period has been declined:<br><br>
                 <head>
-                   
+                
                     <style>
                         table {{
                             border-collapse: collapse;
@@ -220,27 +256,29 @@ def reject_1(request, pk):
                     <td>{obj.sub_leave}</td>
                     </tr>
                     <tr>
-                    <th>Satus</th>
+                    <th>Status</th>
                     <td>{obj.status}</td>
                     </tr>
                     <tr>
-                    <th>Reason </th>
-                    <td> nothing!</td>
+                    <th>Reason</th>
+                    <td>{reason_text}</td>
                     </tr>
                 </table><br>
                 If you have any questions, please don't hesitate to reach out to us.<br><br>
                 Regards,<br>
                 The HR Team"""
 
+
     send_mail(
         'Leave Status',
-        message,
+        '',
         'nilesh.ultragmaes@gmail.com',
         [user.email],
         fail_silently=False,
         html_message=message,
     )
     return redirect('/dashboard')
+
 
 
 def cancel_1(request, pk):
